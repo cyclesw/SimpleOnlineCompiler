@@ -1,0 +1,194 @@
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>在线编译器</title>
+    <link href="styles.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ext-language_tools.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="sidePanel">
+        <div class="toggleButton" id="optionToggle">
+            <div></div><div></div><div></div>
+            <a style="display: block; text-align: center; margin: 0 auto; width: 250px; padding-top: 20px; font-size: 20px" >
+                简易在线编辑器
+            </a>
+        </div>
+        <div id="option" style="position: absolute; overflow: hidden; top: 110px; bottom: 0">
+            <table role="presentation" id="controls">
+                <tr class="optionTable">
+                    <td>
+                        <label for="-mode">编译器</label>
+                    </td>
+                    <td>
+                        <select id="-mode">
+                            <optgroup label="模式">
+                                <option value="ace/mode/c_cpp">C/C++</option>
+                                <option value="ace/mode/csharp">C#</option>
+                                <option value="ace/mode/python">Python</option>
+                                <option value="ace/mode/javascript">JavaScript</option>
+                            </optgroup>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="optionTable">
+                    <td>
+                        <label for="-theme">主题</label>
+                    </td>
+                    <td>
+                        <select id="-theme" >
+                            <optgroup label="暗色主题">
+                                <option value="ace/theme/monokai">Monokai</option>
+                                <option value="ace/theme/one_dark" selected="selected">One Dark</option>
+                            </optgroup>
+                            <optgroup label="明亮主题">
+                                <option value="ace/theme/github">GitHub (Legacy)</option>
+                                <option value="ace/theme/xcode">XCode</option>
+                            </optgroup>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="optionTable">
+                    <td>
+                        <label for="-fontsize">Font Size</label>
+                    </td>
+                    <td>
+                        <input type="number" id="-fontsize" style="width: 3em" value="16">
+                        <button onclick="setFontSize(12)">12px</button>
+                        <button onclick="setFontSize(16)">16px</button>
+                    </td>
+                </tr>
+                <tr class="optionTable">
+                    <td>
+                        <label for="-softTable">缩进</label>
+                    </td>
+                    <td>
+                        <input type="checkbox" checked="checked">
+                        <input type="number" style="width: 5em" value="4" id="-softTable">
+                    </td>
+                </tr>
+                <tr class="optionTable">
+                    <td>
+                        <label for="-memorySet">内存(测试)</label>
+                    </td>
+                    <td>
+                        <input type="number" id="-memorySet" value="1" style="width: 3em" onchange="memorySet=this.value;">
+                    </td>
+                </tr>
+                <tr class="optionTable">
+                    <td>
+                        <label for="-timeSet">时间(测试)</label>
+                    </td>
+                    <td>
+                        <input type="number" id="-timeSet" value="1" style="width: 3em" onchange="timeSet=this.value;">
+                    </td>
+                </tr>
+                <tr class="optionTable">
+                    <td >
+                        <label for="-push">运行代码
+                        </label>
+                    </td>
+                    <td>
+                        <button id="-push" style="width: 8em" onclick="runCode()">提交</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="code"></div>
+    <script>
+        const server = "http://localhost:8080";
+        let defaultTableSize = 4;
+        let memorySet = 1;
+        let timeSet = 1;
+        let codeMode = "c_cpp";
+
+        //初始化对象
+        editor = ace.edit("code");
+
+        //设置风格和语言（更多风格和语言，请到github上相应目录查看）
+        // 主题大全：http://www.manongjc.com/detail/25-cfpdrwkkivkikmk.html
+        editor.setTheme("ace/theme/one_dark");
+        editor.session.setMode("ace/mode/c_cpp");
+
+        // 字体大小
+        editor.setFontSize(16);
+        // 设置默认制表符的大小:
+        editor.session.setTabSize(4);
+
+        // 设置只读（true时只读，用于展示代码）
+        editor.setReadOnly(false);
+
+        // 启用提示菜单
+        ace.require("ace/ext/language_tools");
+        editor.setOptions({
+            enableBasicAutocompletion: true,
+            enableSnippets: true,
+            enableLiveAutocompletion: true
+        });
+
+        document.getElementById("-theme").addEventListener('change', function () {
+            let selectTheme = this.value;
+            editor.setTheme(selectTheme);
+            console.log("主题选择：", selectTheme);
+        });
+
+        document.getElementById("-mode").addEventListener('change', function () {
+            let selectMode = this.value;
+            console.log("模式选择：", selectMode);
+            editor.session.setMode(selectMode);
+            codeMode = selectMode.substring(selectMode.lastIndexOf('/') + 1);
+            // console.log("codeMode: ", codeMode);
+            // editor.setMod(codeMod); ？？？
+        });
+
+        function setFontSize(size) {
+            let inputField = document.getElementById("-fontsize");
+            inputField.value = size;
+            editor.setFontSize(size);
+            console.log('用户选择的字体大小:', size + 'px');
+        }
+
+        document.getElementById("-fontsize").addEventListener('change', function () {
+            let fontsize = this.value;
+            setFontSize(fontsize);
+        });
+
+        document.getElementById("-softTable").addEventListener('change', function () {
+            let isCheck = this.parentElement.querySelector('input[type="checkbox"]').checked;
+            // console.log("isCheck: ", isCheck);
+            if(isCheck === true)
+            {
+                let size = this.value;
+                console.log("缩进：", size);
+                editor.setOption('tabSize', parseInt(size, 10));
+            }
+            else
+            {
+                editor.setOption('tabSize', defaultTableSize);
+            }
+        });
+
+        function runCode() {
+            let MyCode = editor.getValue();
+            console.log(MyCode);
+            $.ajax({
+                url: server + '/run',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    code: MyCode,
+                    mode: codeMode,
+                    cpu_limit: timeSet,
+                    mem_limit: memorySet
+                })
+            })
+        }
+
+    </script>
+</body>
+</html>
