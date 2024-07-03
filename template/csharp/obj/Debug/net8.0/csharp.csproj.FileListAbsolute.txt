@@ -1,0 +1,15 @@
+/Users/langliu/code/github/SimpleOnlineCompiler/template/csharp/obj/Debug/net8.0/csharp.GeneratedMSBuildEditorConfig.editorconfig
+/Users/langliu/code/github/SimpleOnlineCompiler/template/csharp/obj/Debug/net8.0/csharp.AssemblyInfoInputs.cache
+/Users/langliu/code/github/SimpleOnlineCompiler/template/csharp/obj/Debug/net8.0/csharp.AssemblyInfo.cs
+/Users/langliu/code/github/SimpleOnlineCompiler/template/csharp/obj/Debug/net8.0/csharp.csproj.CoreCompileInputs.cache
+/Users/langliu/code/github/SimpleOnlineCompiler/template/csharp/obj/Debug/net8.0/csharp.sourcelink.json
+/Users/langliu/code/github/SimpleOnlineCompiler/template/csharp/bin/Debug/net8.0/csharp
+/Users/langliu/code/github/SimpleOnlineCompiler/template/csharp/bin/Debug/net8.0/csharp.deps.json
+/Users/langliu/code/github/SimpleOnlineCompiler/template/csharp/bin/Debug/net8.0/csharp.runtimeconfig.json
+/Users/langliu/code/github/SimpleOnlineCompiler/template/csharp/bin/Debug/net8.0/csharp.dll
+/Users/langliu/code/github/SimpleOnlineCompiler/template/csharp/bin/Debug/net8.0/csharp.pdb
+/Users/langliu/code/github/SimpleOnlineCompiler/template/csharp/obj/Debug/net8.0/csharp.dll
+/Users/langliu/code/github/SimpleOnlineCompiler/template/csharp/obj/Debug/net8.0/refint/csharp.dll
+/Users/langliu/code/github/SimpleOnlineCompiler/template/csharp/obj/Debug/net8.0/csharp.pdb
+/Users/langliu/code/github/SimpleOnlineCompiler/template/csharp/obj/Debug/net8.0/csharp.genruntimeconfig.cache
+/Users/langliu/code/github/SimpleOnlineCompiler/template/csharp/obj/Debug/net8.0/ref/csharp.dll

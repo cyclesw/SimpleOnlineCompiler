@@ -6,18 +6,16 @@ int main()
 {
     using namespace httplib;
     using namespace ns_util;
+    system("echo $PATH");
 
     Server svr;
 
     svr.set_base_dir("./wwwroot");
     
     svr.Post("/run", [](const Request & req, Response &res) {
-        system("pwd");
         std::string in_json = req.body;
         std::string out_json;
-        LOG_DEBUG("{}", req.body);
-        CompileAndRun::Start(in_json, &out_json);       
-        // LOG_DEBUG("{}", out_json);
+        CompileAndRun::Start(in_json, &out_json);
         res.set_content(out_json, "application/json");
     });
 

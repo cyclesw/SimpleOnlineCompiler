@@ -19,7 +19,8 @@ find_package(PkgConfig)
 pkg_check_modules(MyLib IMPORTED_TARGET gtest spdlog jsoncpp cpp-httplib)
 
 add_executable(Main main.cpp
-        )
+        Common/util.hpp
+)
 
 target_link_libraries(Main 
         PkgConfig::MyLib

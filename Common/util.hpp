@@ -2,55 +2,62 @@
 // Created by lang liu on 24-4-23.
 //
 
-#ifndef _OJ_UTIL_HPP
-#define _OJ_UTIL_HPP
+#ifndef OJ_UTIL_HPP
+#define OJ_UTIL_HPP
 
 #include "log.hpp"
 #include <sys/time.h>
 #include <sys/stat.h>
 #include <fstream>
 #include <atomic>
-#include <mapTable.hpp>
 
 namespace ns_util
 {
     using namespace ns_log;
-    using namespace ns_table;
+    static inline std::unordered_map<std::string, std::string> suffixTable {
+        {"c_cpp", ".cc"},
+        {"csharp", ".cs"},
+        {"python", ".py"},
+        {"javascript", ".js"}
+    };
+
+    static inline std::unordered_map<std::string, std::string> excuteTable {
+        {"c_cpp", ".exe"},
+        {"csharp", ".cs"},
+        {"javascript", ".js"},
+        {"python", ".py"}
+    };
 
     class TimeUtil
     {
     public:
         static std::string GetTimeStamp()
         {
-            struct timeval _tv;
+            struct timeval _tv{};
             gettimeofday(&_tv, nullptr);
             return std::to_string(_tv.tv_sec);
         }
 
         static std::string GetTimeNs()
         {   //获取时间毫秒，用于生成随机性文件
-            struct timeval _tv;
+            struct timeval _tv{};
             gettimeofday(&_tv, nullptr);
             return std::to_string(_tv.tv_sec * 1000 + _tv.tv_usec / 1000);
         }
     };
 
-
+    static std::string path;
+    static std::string srcSuffix;
+    static std::string excuteSuffix;
+    static const std::string temp_path = "./template/";
     //fixme basedir
     class PathUtil
     {
-    private:
-        static std::string path;
-        static std::string srcSuffix;
-        static const std::string temp_path;
     public:
-        static void GetTemplatePath(const std::string& lang) {
-            path = temp_path + lang;
-            srcSuffix = langToSuffix(lang);
-        }
-
-        static std::string langToSuffix(const std::string& lang) {
-            return langSuffixTable.at(lang);
+        static void InitTemplate(const std::string& lang) {
+            path = temp_path + lang + "/";
+            srcSuffix = suffixTable.at(lang);
+            excuteSuffix = excuteTable.at(lang);
         }
 
         static std::string AddSuffix(const std::string &file_name, const std::string& suffix)
@@ -68,7 +75,7 @@ namespace ns_util
 
         static std::string Exe(const std::string& file_name)
         {
-            return AddSuffix(file_name, ".exe");
+            return AddSuffix(file_name, excuteSuffix);
         }
 
         static std::string CompilerError(const std::string& file_name)
@@ -92,11 +99,36 @@ namespace ns_util
         }
     };
 
-    const std::string PathUtil::temp_path = "./template";
-
     class FileUtil
     {
+    private:
     public:
+        static void RemoveAllFile(const std::string& dir) {
+            std::vector<std::filesystem::path> removeArray;
+
+            try {
+                for(auto& it : std::filesystem::directory_iterator(dir)) {
+                    if(std::filesystem::is_regular_file(it.path()))
+                        removeArray.push_back(it.path());
+                    else if (std::filesystem::is_directory(it.path()))
+                        RemoveAllFile(it.path().string());
+                }
+
+                for(auto& it : removeArray) {
+                    std::filesystem::remove(it);
+                }
+            }
+            catch (const std::filesystem::filesystem_error& e) {
+                LOG_ERROR("移除全部文件失败: {}", e.what());
+            }
+        }
+
+        static void RemoveFile(const std::string& filename) {
+            if(std::filesystem::exists(filename)) {
+                std::filesystem::remove(filename);
+            }
+        }
+
         static bool IsFileExists(const std::string & path_name)
         {
             struct stat st = {};
@@ -158,4 +190,4 @@ namespace ns_util
 };
 
 
-#endif //_OJ_UTIL_HPP
+#endif //OJ_UTIL_HPP
