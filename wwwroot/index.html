@@ -144,8 +144,8 @@
     })
 
     $("-mode").on("change", function() {
-        let selectMode = this.value;
-        editor.session.setMode(selectMode);
+        codeMode = this.val();
+        editor.session.setMode(codeMode);
         codeMode = selectMode.substring(selectMode.lastIndexOf("/") + 1);
         console.log(selectMode);
     })
@@ -162,7 +162,8 @@
 
     function Commit() {
         let myCode = editor.getValue();
-        let tx = $("result");
+        let tx = $("#result");
+        tx.text('代码运行中...............');
         $.ajax({
             url: server + '/run',
             type: "POST",
@@ -170,7 +171,7 @@
             dataType: "json",
             data: JSON.stringify({
                 code: myCode,
-                language: myCode,
+                language: codeMode,
                 cpu_limit: timeSet,
                 mem_limit: memorySet,
             }),

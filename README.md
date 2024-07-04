@@ -6,7 +6,7 @@
 
 ```shell
 # 后端
-c_cpp-httplib、jsoncpp、spdlog、gtest
+c_cpp-httplib、jsoncpp、spdlog
 
 # 前端
 jquery、ace
@@ -15,9 +15,11 @@ jquery、ace
 **使用方法**
 
 ```shell
-cmake && cd build && make && cd ..
-./build/Main
+madir build && cd build && cmake .. && cmake
+cd ..
+./build/main
 ```
 
 **效果展示**
 
+<img src="img.png" alt=".">

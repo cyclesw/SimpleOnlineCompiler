@@ -5,7 +5,7 @@ int main()
 {
     using namespace httplib;
     using namespace ns_util;
-    system("echo $PATH");
+    system("pwd");
 
     Server svr;
 

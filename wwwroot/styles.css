@@ -25,7 +25,7 @@ html, body {
 }
 
 .left {
-    background-color: lightpink; /* 左半部分的颜色 */
+    background-color: pink; /* 左半部分的颜色 */
     width: 25%;
     height: 100%;
     /*position: fixed;*/
