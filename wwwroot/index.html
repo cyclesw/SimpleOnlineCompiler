@@ -144,7 +144,7 @@
     })
 
     $("-mode").on("change", function() {
-        codeMode = this.val();
+        let selectMode = this.val();
         editor.session.setMode(codeMode);
         codeMode = selectMode.substring(selectMode.lastIndexOf("/") + 1);
         console.log(selectMode);
