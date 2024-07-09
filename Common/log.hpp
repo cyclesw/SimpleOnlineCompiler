@@ -4,14 +4,6 @@
 
 #pragma once
 
-// # ifdef SPDLOG_COMPILED_LIB
-
-//
-// Created by lang liu on 24-4-23.
-//
-
-#pragma once
-
 #ifdef DEBUG
 #define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_DEBUG
 #endif
@@ -21,6 +13,8 @@
 
 namespace ns_log {
     //TODO 初始化日记 完善
+
+    //单例日志系统
     class Log {
     public:
         static Log &getInstance() {

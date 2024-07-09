@@ -1,11 +1,15 @@
 #include "compile_run.hpp"
 #include <httplib.h>
 
+
 int main()
 {
     using namespace httplib;
     using namespace ns_util;
-    system("pwd");
+
+
+
+    // system("pwd");
 
     Server svr;
 

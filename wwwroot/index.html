@@ -180,7 +180,7 @@
                     tx.text(resp.stdout);
                 }
                 else {
-                    tx.text(resp.stderr);
+                    tx.text(resp.reason + "\n" + resp.stderr);
                 }
             },
             error: function() {
