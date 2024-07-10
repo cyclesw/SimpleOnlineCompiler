@@ -6,7 +6,7 @@
 
 ```shell
 # 后端
-c_cpp-httplib、jsoncpp、spdlog
+cpp-httplib、jsoncpp、spdlog
 
 # 前端
 jquery、ace
